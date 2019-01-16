@@ -27,12 +27,11 @@ public class Enemy : MonoBehaviour {
                 pos++;
             }
         }
-        else {
+        else 
+	{
             Destroy(gameObject);
-        }
-        
-		
-	}
+        }	
+}
 
 
     public void OnTriggerEnter2D(Collider2D collider)
