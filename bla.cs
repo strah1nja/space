@@ -1,1 +1,0 @@
-Sytem.Console.WriteLine("asad");
