@@ -13,7 +13,6 @@ public class Enemy : MonoBehaviour {
         positions = waveConfig.GetWayPoints();
         transform.position = positions[pos].transform.position;
         health = waveConfig.GetHealth();
-
     }
 
     // Update is called once per frame
