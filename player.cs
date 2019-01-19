@@ -14,7 +14,9 @@ public class player : MonoBehaviour
     [SerializeField] float speed = 5f;
     Coroutine fireing;
     [SerializeField] int health;
-    
+    [SerializeField] AudioClip laserShot, playerExplosion;
+    [SerializeField] [Range(0, 1)] float playerLaserVolume = 0.5f;
+
 
     // Use this for initialization
     void Start()
@@ -49,6 +51,7 @@ public class player : MonoBehaviour
         if (health <= 0)
         {
             Destroy(gameObject);
+            AudioSource.PlayClipAtPoint(playerExplosion, Camera.main.transform.position);
         }
     }
 
@@ -73,6 +76,7 @@ public class player : MonoBehaviour
         while (true)
         {
             GameObject shot = Instantiate(laser, transform.position, Quaternion.identity) as GameObject;
+            AudioSource.PlayClipAtPoint(laserShot, Camera.main.transform.position, playerLaserVolume);
             shot.GetComponent<Rigidbody2D>().velocity += new Vector2(0, firespeed);
             yield return new WaitForSeconds(firerate);
         }

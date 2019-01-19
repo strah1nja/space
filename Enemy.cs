@@ -9,6 +9,9 @@ public class Enemy : MonoBehaviour {
     [SerializeField] float shotSpeed;
     [SerializeField] GameObject expl;
     List<Transform> positions;
+    [SerializeField] AudioClip a, laseShot;
+    [SerializeField] [Range(0,1)] float enemyDeathVolume= 0.5f;
+    [SerializeField] [Range(0, 1)] float enemyLaserVolume = 0.5f;
     int pos = 0;
     float speed = 2f;
     int health;
@@ -44,6 +47,7 @@ public class Enemy : MonoBehaviour {
         while (true)
         {
             GameObject laser = Instantiate(shot, transform.position, Quaternion.identity);
+            AudioSource.PlayClipAtPoint(laseShot, Camera.main.transform.position, enemyLaserVolume);
             laser.GetComponent<Rigidbody2D>().velocity -= new Vector2(0, shotSpeed * Time.deltaTime);
             yield return new WaitForSeconds(firerate);
 
@@ -66,6 +70,7 @@ public class Enemy : MonoBehaviour {
         {
             Destroy(gameObject);
             Instantiate(expl, transform.position, transform.rotation);
+            AudioSource.PlayClipAtPoint(a, Camera.main.transform.position, enemyDeathVolume);
         }
     }
 }
