@@ -13,6 +13,7 @@ public class player : MonoBehaviour
     private float yMax;
     [SerializeField] float speed = 5f;
     Coroutine fireing;
+    [SerializeField] int health;
     
 
     // Use this for initialization
@@ -34,6 +35,22 @@ public class player : MonoBehaviour
     }
 
 
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        DamageDealer ddealer = collision.gameObject.GetComponent<DamageDealer>();
+        ProcessHit(ddealer);
+    }
+
+    private void ProcessHit(DamageDealer ddealer)
+    {
+        health -= ddealer.GetDamage();
+        ddealer.Destroy();
+        print("PlayerHealth: " + health);
+        if (health <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
 
     public void Shoot() {
 

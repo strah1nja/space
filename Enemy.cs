@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour {
     [SerializeField] WaveConfig waveConfig;
+    [SerializeField] float firerate = 0.5f;
+    [SerializeField] GameObject shot;
+    [SerializeField] float shotSpeed;
+    [SerializeField] GameObject expl;
     List<Transform> positions;
     int pos = 0;
     float speed = 2f;
@@ -13,6 +17,8 @@ public class Enemy : MonoBehaviour {
         positions = waveConfig.GetWayPoints();
         transform.position = positions[pos].transform.position;
         health = waveConfig.GetHealth();
+        StartCoroutine(Fire());
+        
     }
 
     // Update is called once per frame
@@ -33,6 +39,17 @@ public class Enemy : MonoBehaviour {
 }
 
 
+    IEnumerator Fire()
+    {
+        while (true)
+        {
+            GameObject laser = Instantiate(shot, transform.position, Quaternion.identity);
+            laser.GetComponent<Rigidbody2D>().velocity -= new Vector2(0, shotSpeed * Time.deltaTime);
+            yield return new WaitForSeconds(firerate);
+
+        }
+    }
+
     public void OnTriggerEnter2D(Collider2D collider)
     {
         DamageDealer damageDealer = collider.gameObject.GetComponent<DamageDealer>();
@@ -48,6 +65,7 @@ public class Enemy : MonoBehaviour {
         if (health <= 0)
         {
             Destroy(gameObject);
+            Instantiate(expl, transform.position, transform.rotation);
         }
     }
 }
