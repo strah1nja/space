@@ -1,12 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class player : MonoBehaviour
 {
     public GameObject laser;
     [SerializeField] float firerate = 1;
     public float firespeed = 2;
+    public bool dead;
+    private int lives = 1;
     private float xMin;
     private float yMin;
     private float xMax;
@@ -17,6 +20,12 @@ public class player : MonoBehaviour
     [SerializeField] AudioClip laserShot, playerExplosion;
     [SerializeField] [Range(0, 1)] float playerLaserVolume = 0.5f;
 
+    [SerializeField] GameObject hud;
+
+    public int GetHelath()
+    {
+        return health;
+    }
 
     // Use this for initialization
     void Start()
@@ -26,6 +35,9 @@ public class player : MonoBehaviour
         xMax = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, 0)).x;
         yMax = Camera.main.ViewportToWorldPoint(new Vector3(0, 1, 0)).y;
         
+        
+        
+        
     }
  
     // Update is called once per frame
@@ -34,7 +46,11 @@ public class player : MonoBehaviour
         PlayerMove();
         Shoot();
         // M2();
+        
+       
     }
+
+    
 
 
     public void OnTriggerEnter2D(Collider2D collision)
@@ -43,7 +59,7 @@ public class player : MonoBehaviour
         ProcessHit(ddealer);
     }
 
-    private void ProcessHit(DamageDealer ddealer)
+    public void ProcessHit(DamageDealer ddealer)
     {
         health -= ddealer.GetDamage();
         ddealer.Destroy();
@@ -52,6 +68,16 @@ public class player : MonoBehaviour
         {
             Destroy(gameObject);
             AudioSource.PlayClipAtPoint(playerExplosion, Camera.main.transform.position);
+            print(lives);
+            lives--;
+            print(lives);
+            //display = hud.gameObject.GetComponent<HUDDisplayer>();
+            //display.UpdateLives(lives);
+            if (lives <= 0)
+            {
+                SceneManager.LoadScene("Lose");
+            }
+
         }
     }
 

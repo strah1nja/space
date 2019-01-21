@@ -8,10 +8,12 @@ public class Enemy : MonoBehaviour {
     [SerializeField] GameObject shot;
     [SerializeField] float shotSpeed;
     [SerializeField] GameObject expl;
+    [SerializeField] int points = 10;
     List<Transform> positions;
     [SerializeField] AudioClip a, laseShot;
     [SerializeField] [Range(0,1)] float enemyDeathVolume= 0.5f;
     [SerializeField] [Range(0, 1)] float enemyLaserVolume = 0.5f;
+    GameSession gses;
     int pos = 0;
     float speed = 2f;
     int health;
@@ -21,6 +23,7 @@ public class Enemy : MonoBehaviour {
         transform.position = positions[pos].transform.position;
         health = waveConfig.GetHealth();
         StartCoroutine(Fire());
+        gses = FindObjectOfType<GameSession>();
         
     }
 
@@ -69,6 +72,7 @@ public class Enemy : MonoBehaviour {
         if (health <= 0)
         {
             Destroy(gameObject);
+            gses.AddToScore(points);
             Instantiate(expl, transform.position, transform.rotation);
             AudioSource.PlayClipAtPoint(a, Camera.main.transform.position, enemyDeathVolume);
         }
